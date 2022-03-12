@@ -14,7 +14,7 @@ s3 = boto3.resource('s3', region_name='ap-northeast-1', aws_access_key_id=os.env
 def lambda_handler(e, context):
     bucket = s3.Bucket(os.environ['S3_BUCKET_NAME'])
     bucket.download_file('credentials.json', '/tmp/credentials.json')
-    creds = service_account.Credentials.from_service_account_file('credentials.json', scopes=SCOPES)
+    creds = service_account.Credentials.from_service_account_file('/tmp/credentials.json', scopes=SCOPES)
     calendar_name = os.environ['CALENDAR_NAME']
     calendars = calendar_name.split(',')
     try:
