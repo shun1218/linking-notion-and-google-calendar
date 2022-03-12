@@ -3,7 +3,7 @@ import datetime
 import os
 import requests
 
-from google.oauth2.credentials import Credentials
+from google.oauth2 import service_account
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 
@@ -13,8 +13,8 @@ s3 = boto3.resource('s3', region_name='ap-northeast-1', aws_access_key_id=os.env
 
 def lambda_handler(e, context):
     bucket = s3.Bucket(os.environ['S3_BUCKET_NAME'])
-    bucket.download_file('token.json', '/tmp/token.json')
-    creds = Credentials.from_authorized_user_file('/tmp/token.json', SCOPES)
+    bucket.download_file('credentials.json', '/tmp/credentials.json')
+    creds = service_account.Credentials.from_service_account_file('credentials.json', scopes=SCOPES)
     calendar_name = os.environ['CALENDAR_NAME']
     calendars = calendar_name.split(',')
     try:
